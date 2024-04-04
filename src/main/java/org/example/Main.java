@@ -21,10 +21,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import static java.util.Arrays.asList;
 import static org.apache.arrow.vector.compression.CompressionUtil.CodecType.LZ4_FRAME;
 
@@ -34,12 +32,16 @@ import org.apache.arrow.vector.Float4Vector;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
 
-    static int no_of_cusips = 100_000;
+    static int no_of_cusips = 100;
     static int no_of_yrs = 10;
 
     static int no_of_observations = no_of_yrs * 365;
 
     public static void main(String[] args) {
+        createCusipVector();
+    }
+
+    public static void generateFloatVector() {
 
         long startTime = System.currentTimeMillis();
 
@@ -85,5 +87,29 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void createCusipVector() {
+        Set uniqueCusips = new HashSet();
+
+        List fields = new ArrayList<>();
+        fields.add(new Field("Cusips", FieldType.notNullable(new ArrowType.Binary()), /*metadata*/ null));
+
+        Schema schema = new Schema(fields, null);
+
+        RootAllocator allocator = new RootAllocator(Long.MAX_VALUE);
+
+        VarCharVector vector = new VarCharVector("vector", allocator);
+        vector.allocateNew();
+
+        for(int i=0; i < no_of_cusips; i++) {
+            String cusip = RandomCusipGenerator.getRandom();
+            vector.setSafe(i, cusip.getBytes(StandardCharsets.UTF_8));
+        }
+
+        vector.setValueCount(no_of_cusips);
+
+        System.out.println(vector.getValueCount());
+
     }
 }

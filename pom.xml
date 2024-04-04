@@ -31,12 +31,17 @@
             <artifactId>arrow-memory-netty</artifactId>
             <version>${arrow.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.arrow/arrow-compression -->
         <dependency>
             <groupId>org.apache.arrow</groupId>
-            <artifactId>arrow-compression</artifactId>
+            <artifactId>flight-core</artifactId>
             <version>${arrow.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.arrow/arrow-compression -->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.arrow</groupId>-->
+<!--            <artifactId>arrow-compression</artifactId>-->
+<!--            <version>${arrow.version}</version>-->
+<!--        </dependency>-->
 
     </dependencies>
 
